@@ -1,8 +1,8 @@
 const BookCardShimmer = () => {
   return (
-    <div className="h-[275px] w-[235px] border border-[#E2E2E2] rounded-[3px] overflow-hidden max-[500px]:w-[175px]">
+    <div className="h-[275px] w-[235px] border border-[#E2E2E2] rounded-[3px] overflow-hidden max-[500px]:w-[175px]  data-testid=" data-testid="book-card-shimmer">
       <div className='h-[171px] w-[100%] bg-[#F5F5F5] flex justify-center items-center animate-pulse'>
-        <div className='h-[135px] w-[105px] bg-gradient-to-r from-[#f0f0f0] via-[#e0e0e0] to-[#f0f0f0] background-animate'></div>
+        <div className='h-[135px] w-[105px] bg-gradient-to-r from-[#f0f0f0] via-[#e0e0e0] to-[#f0f0f0] background-animate' data-testid="shimmer-element"></div>
       </div>
       <div className='h-[102px] w-[100%] !pl-[10px] !pt-[10px] flex flex-col gap-[5px]'>
         <div className='h-[14px] w-[80%] bg-gradient-to-r from-[#f0f0f0] via-[#e0e0e0] to-[#f0f0f0] background-animate rounded-[2px]'></div>
