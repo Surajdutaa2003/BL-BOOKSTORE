@@ -1,12 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743150727248" clover="3.2.0">
-  <project timestamp="1743150727248" name="All files">
-    <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="4" coveredelements="4" complexity="0" loc="3" ncloc="3" packages="1" files="1" classes="1"/>
-    <file name="BookCardShimmer.tsx" path="C:\Users\adm\Downloads\BL-BOOKSTORE-masterN\BL-BOOKSTORE-master\src\components\BookCardShimmer.tsx">
-      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="2" count="2" type="stmt"/>
-      <line num="23" count="1" type="stmt"/>
-    </file>
+<coverage generated="1743166118554" clover="3.2.0">
+  <project timestamp="1743166118554" name="All files">
+    <metrics statements="54" coveredstatements="54" conditionals="4" coveredconditionals="4" methods="10" coveredmethods="10" elements="68" coveredelements="68" complexity="0" loc="54" ncloc="54" packages="2" files="5" classes="5"/>
+    <package name="components">
+      <metrics statements="49" coveredstatements="49" conditionals="4" coveredconditionals="4" methods="9" coveredmethods="9"/>
+      <file name="AddressCart.tsx" path="C:\Users\adm\Downloads\BL-BOOKSTORE-masterN\BL-BOOKSTORE-master\src\components\AddressCart.tsx">
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="8" count="6" type="stmt"/>
+        <line num="10" count="6" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="14" count="6" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="123" count="1" type="stmt"/>
+      </file>
+      <file name="BookCard.tsx" path="C:\Users\adm\Downloads\BL-BOOKSTORE-masterN\BL-BOOKSTORE-master\src\components\BookCard.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+      </file>
+      <file name="BookCardShimmer.tsx" path="C:\Users\adm\Downloads\BL-BOOKSTORE-masterN\BL-BOOKSTORE-master\src\components\BookCardShimmer.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+      </file>
+      <file name="CartCounter.tsx" path="C:\Users\adm\Downloads\BL-BOOKSTORE-masterN\BL-BOOKSTORE-master\src\components\CartCounter.tsx">
+        <metrics statements="33" coveredstatements="33" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="13" count="6" type="stmt"/>
+        <line num="14" count="6" type="stmt"/>
+        <line num="15" count="6" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="17" count="6" type="stmt"/>
+        <line num="19" count="6" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="34" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="50" count="6" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="pages">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="BookPage.tsx" path="C:\Users\adm\Downloads\BL-BOOKSTORE-masterN\BL-BOOKSTORE-master\src\pages\BookPage.tsx">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>

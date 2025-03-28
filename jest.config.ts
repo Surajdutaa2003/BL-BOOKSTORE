@@ -7,11 +7,13 @@ const config: Config = {
 
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   moduleNameMapper: {
-    "\\.(css|scss)$": "identity-obj-proxy"
+    "\\.(css|scss)$": "identity-obj-proxy", 
+    "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/src/Mock/fileMock.js"
   },
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest"
-  }
+  },
+   
 };
 
 export default config;
