@@ -97,10 +97,10 @@ describe("CartCounter Component", () => {
         fireEvent.click(decrementButton);
 
         await waitFor(() => {
-            expect(updateCartItems).not.toHaveBeenCalled(); // ✅ Ensure API not called
+            expect(updateCartItems).not.toHaveBeenCalled(); 
             expect(toast.error).toHaveBeenCalledWith("Quantity cannot be less than 1");
         });
 
-        expect(screen.getByText("1")).toBeInTheDocument(); // ✅ UI should not change
+        expect(screen.getByText("1")).toBeInTheDocument(); 
     });
 });

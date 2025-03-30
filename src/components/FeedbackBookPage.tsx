@@ -84,6 +84,8 @@ function FeedbackBookPage() {
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <Star
                                         key={star}
+                                        role='img'
+                                        aria-label={`star ${star}`}
                                         className={`w-5 h-5 cursor-pointer transition ${(hover || rating) >= star ? "fill-yellow-500 stroke-yellow-500" : "stroke-gray-400"
                                             }`}
                                         onMouseEnter={() => setHover(star)}

@@ -97,7 +97,7 @@ function SignupPage() {
                                 onChange={(e: { target: { value: SetStateAction<string>; }; }) => setEmail(e.target.value)}
                             />
                             {errorField === "email" && (
-                                <span className="text-[10px] text-[red]">
+                                <span className="text-[10px] text-[red]" data-testid="error-email">
                                     Enter a valid email address.
                                 </span>
                             )}

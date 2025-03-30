@@ -8,7 +8,7 @@ const config: Config = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   moduleNameMapper: {
     "\\.(css|scss)$": "identity-obj-proxy", 
-    "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/src/Mock/fileMock.js"
+    "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/src/__mocks__/fileMock.ts"
   },
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest"

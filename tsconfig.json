@@ -5,14 +5,17 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "types": ["jest","node"],
+    "types": ["jest","node","react"],
     "module": "CommonJS",
     "target": "ESNext",
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "strict": true,
-    "lib": ["dom", "esnext"]
+    "lib": ["dom", "esnext"],
 
 
-  }
+
+  },
+  "include": ["src", "src/images.d.ts"]
+
 }
