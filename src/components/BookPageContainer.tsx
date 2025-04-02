@@ -22,16 +22,15 @@ interface Book {
 }
 
 interface WishlistItem {
-    product_id: Book | null;
+    product_id: Book;
     _id: string;
 }
 
 function BookPageContainer() {
-    const { bookId } = useParams<{ bookId: string }>();
+    const { bookId } = useParams();
     const [showImage1, setShowImage1] = useState(true);
-    const [wishlistedBooks, setWishlistedBooks] = useState<WishlistItem[] | null>(null);
+    const [wishlistedBooks, setWishlistedBooks] = useState<WishlistItem[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loading, setLoading] = useState(true);
     const location = useLocation();
     const { data } = location.state || {};
     const navigate = useNavigate();
@@ -39,70 +38,45 @@ function BookPageContainer() {
 
     const { items } = useSelector((state: RootState) => state.cart);
     const bookInCart = items.find((book) => book.product_id._id === bookId);
-    const bookInCartQuantity = bookInCart?.quantityToBuy || 0;
+    const bookInCartQuantity = bookInCart?.quantityToBuy ?? 0;
     const showCounter = bookInCartQuantity > 0;
 
-    // Enhanced diagnostics
-    console.log("Rendering BookPageContainer, wishlistedBooks:", wishlistedBooks);
-    const safeWishlist = wishlistedBooks || [];
-    const isCurrentBookWishlisted = safeWishlist.some((book) => {
-        if (!book) {
-            console.warn("Wishlist item is null or undefined:", book);
-            return false;
-        }
-        if (!book.product_id) {
-            console.warn("Wishlist item with null product_id:", book);
-            return false;
-        }
-        return book.product_id._id === bookId;
-    });
+    const isCurrentBookWishlisted = wishlistedBooks.some((book) => book.product_id._id === bookId);
     const [isWishlisted, setIsWishlisted] = useState(isCurrentBookWishlisted);
 
     useEffect(() => {
-        const fetchData = async () => {
+        dispatch(fetchCartItems());
+        const fetchWishlist = async () => {
             try {
-                setLoading(true);
-                await dispatch(fetchCartItems()).unwrap();
                 const response = await getWishlistItems();
-                console.log("Fetched wishlistedBooks:", response.result);
-                setWishlistedBooks(response.result?.reverse() || []);
+                setWishlistedBooks(response.result.reverse());
             } catch (error) {
-                console.error("Error fetching data:", error);
-                toast.error("Failed to load page data.");
-                setWishlistedBooks([]); // Fallback to empty array
-            } finally {
-                setLoading(false);
+                console.error("Error fetching wishlist:", error);
             }
         };
-        fetchData();
+        fetchWishlist();
     }, [dispatch]);
 
     useEffect(() => {
-        if (wishlistedBooks !== null) {
-            console.log("Updating isWishlisted, wishlistedBooks:", wishlistedBooks);
-            setIsWishlisted(safeWishlist.some((book) => book?.product_id?._id === bookId));
-        }
+        setIsWishlisted(wishlistedBooks.some((book) => book.product_id._id === bookId));
     }, [wishlistedBooks, bookId]);
 
     useEffect(() => {
-        const tokenData = JSON.parse(localStorage.getItem("token") || "null");
+        const tokenData = JSON.parse(localStorage.getItem("token") ?? "null");
         setIsLoggedIn(!!tokenData?.token);
     }, []);
 
     const handleWishlist = async () => {
-        if (!bookId) return;
         try {
             if (isWishlisted) {
                 await removeWishlist(bookId);
-                toast.success("Item Removed From Wishlist! ✅");
+                toast.success("Item Removed From Wishlist!");
                 setIsWishlisted(false);
             } else {
                 await addWishlist(bookId);
                 toast.success("Item Added to Wishlist! ✅");
                 setIsWishlisted(true);
             }
-            const response = await getWishlistItems();
-            setWishlistedBooks(response.result?.reverse() || []);
         } catch (error) {
             console.error("Wishlist operation failed:", error);
             toast.error("Something went wrong! ❌");
@@ -114,32 +88,15 @@ function BookPageContainer() {
             navigate("/pleaselogin");
             return;
         }
-        if (!bookId) return;
         try {
             await addToCart(bookId);
             toast.success("Item added to cart! ✅");
-            await dispatch(fetchCartItems()).unwrap();
+            dispatch(fetchCartItems());
         } catch (error) {
             console.error("Error adding to cart:", error);
             toast.error("Failed to add item to cart. ❌");
         }
     };
-
-    if (loading || wishlistedBooks === null) {
-        return (
-            <div className='!mt-[60px] w-[100%] flex flex-col items-center !my-[35px]'>
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
-    if (!data) {
-        return (
-            <div className='!mt-[60px] w-[100%] flex flex-col items-center !my-[35px]'>
-                <p>Book not found.</p>
-            </div>
-        );
-    }
 
     return (
         <div className='!mt-[60px] w-[100%] flex flex-col items-center !my-[35px]'>
@@ -158,16 +115,20 @@ function BookPageContainer() {
             <div className='w-[68%] flex justify-between max-md:w-[90%] max-md:flex-col max-md:justify-center max-md:items-center max-sm:flex-col max-sm:justify-center max-sm:items-center'>
                 <div className='w-[35%] h-[500px] flex max-md:w-[45%] max-sm:w-[90%]'>
                     <div className='w-[15%] h-[200px]'>
-                        <div className='h-[65px] w-[100%] border border-black flex justify-center items-center hover:cursor-pointer'>
-                            <img src={data.cover} className='h-[62px] !p-[2px]' onClick={() => setShowImage1(true)} />
+                        <div className='h-[65px] w-[100%] border border-black flex justify-center items-center hover:cursor-pointer'  >
+                            <button style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+                                <img src={data.cover} alt='Not Found' className='h-[62px] !p-[2px]' onClick={() => setShowImage1(true)} />
+                            </button>
                         </div>
-                        <div className='h-[65px] w-[100%] border border-black flex justify-center items-center hover:cursor-pointer'>
-                            <img src={bookImage2} className='h-[62px] !p-[2px]' onClick={() => setShowImage1(false)} />
+                        <div className='h-[65px] w-[100%] border border-black flex justify-center items-center hover:cursor-pointer' >
+                            <button style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+                                <img src={bookImage2} alt='Not Found' className='h-[62px] !p-[2px]' onClick={() => setShowImage1(false)} />
+                            </button>
                         </div>
                     </div>
                     <div className='w-[85%] flex flex-col gap-2.5'>
                         <div className='w-[100%] h-[375px] border border-[grey] flex justify-center items-center max-[1050px]:h-[250px]'>
-                            <img src={showImage1 ? data.cover : bookImage2} className='h-[90%] max-[1050px]:h-[70%]' />
+                            <img src={showImage1 ? data.cover : bookImage2} alt='Not Found' className='h-[90%] max-[1050px]:h-[70%]' />
                         </div>
                         <div className="w-[100%] flex flex-col lg:flex-row justify-between gap-4 lg:gap-6 lg:w-full">
                             {showCounter ? (

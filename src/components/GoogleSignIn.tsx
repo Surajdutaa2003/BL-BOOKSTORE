@@ -21,7 +21,7 @@ function GoogleSignIn() {
     }
 
     return (
-        <GoogleOAuthProvider clientId='931774024078-17nqt0e40dm09mvrr28o2fa04mti3jal.apps.googleusercontent.com'>
+        <GoogleOAuthProvider clientId='848179557462-n48vdd3lb42ql9agb0k2fa9bnm90vmtg.apps.googleusercontent.com'>
             <GoogleLogin
                 onSuccess={handleSuccess}
                 onError={handleError}

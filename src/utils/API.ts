@@ -29,8 +29,15 @@ export const getAllBooks = async () => {
         return response.data;
     }
     catch (error) {
-        console.error("Fetching Books Failed", error);
+        console.error("Error While Fetching Book via Main API: ", error);
+        try{
+            const response=await axios.get("http://localhost:3000/bookList");
+            return response.data;
+        }
+        catch(error){
+            console.error("Fetching Books Failed", error);
         throw error;
+        }
     }
 }
 
@@ -205,7 +212,6 @@ export const updateCartItems = async (bookId: string | undefined, quantity: numb
             }
         });
 
-        console.log("RESPONSE FROM API CALL: ", response);
         return response.status;
     } catch (error) {
         console.error("Updating Cart Items Failed", error);
@@ -230,7 +236,6 @@ export const addOrder = async (allOrders: {
             }
         });
 
-        console.log("RESPONSE FROM API CALL: ", response);
         return response.status;
     } catch (error) {
         console.error("Updating Cart Items Failed", error);
@@ -238,7 +243,6 @@ export const addOrder = async (allOrders: {
     }
 };
 
-
-
+// ss
 
 

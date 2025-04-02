@@ -2,5 +2,5 @@ projectKey=book_store
 serverUrl=http://localhost:9000
 serverVersion=25.3.0.104237
 dashboardUrl=http://localhost:9000/dashboard?id=book_store
-ceTaskId=685b3a4a-cc27-4ba4-a2cb-7a10be72fe51
-ceTaskUrl=http://localhost:9000/api/ce/task?id=685b3a4a-cc27-4ba4-a2cb-7a10be72fe51
+ceTaskId=dc95bddb-c9a8-404e-8fa9-38398e796219
+ceTaskUrl=http://localhost:9000/api/ce/task?id=dc95bddb-c9a8-404e-8fa9-38398e796219

@@ -1,65 +1,144 @@
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
-import { store } from "../redux/store";
-import Profile from "../pages/Profile";
+import { render, screen, fireEvent } from '@testing-library/react';
+import Profile from '../pages/Profile';
 
-// Mock Navbar and Footer since they’re imported in Profile
-jest.mock("../components/Navbar", () => () => <div data-testid="mock-navbar">Navbar</div>);
-jest.mock("../components/Footer", () => () => <div data-testid="mock-footer">Footer</div>);
+// Mock components
+jest.mock('../components/Navbar', () => () => <div data-testid="mock-navbar">Navbar</div>);
+jest.mock('../components/Footer', () => () => <div data-testid="mock-footer">Footer</div>);
 
-const renderWithProviders = (ui: React.ReactElement) => {
-  return render(
-    <Provider store={store}>
-      <MemoryRouter>{ui}</MemoryRouter>
-    </Provider>
-  );
-};
-
-describe("Profile Page", () => {
-  test("renders Personal Details and Address sections", () => {
-    renderWithProviders(<Profile />);
-    
-    expect(screen.getByText(/personal details/i)).toBeInTheDocument();
-    expect(screen.getByText(/address details/i)).toBeInTheDocument();
+describe('Profile Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("renders user information", () => {
-    renderWithProviders(<Profile />);
-    
-    // Use getByText since data is synchronously available from initial state
-    expect(screen.getByRole("textbox", { name: /full name/i })).toHaveValue("John Doe");
+  // Helper function to get the personal edit button more reliably
+  const getPersonalEditButton = () => {
+    const personalSection = screen.getByText('Personal Details').closest('div')!;
+    return personalSection.querySelector('p[text="Edit"]') || screen.getAllByText('Edit')[0];
+  };
 
-    expect(screen.getByRole("textbox",{name:/email/i})).toHaveValue("john@example.com");
-    expect(screen.getByLabelText(/mobile number/i)).toHaveValue("1234567890");
+  // Test for lines 36-37: handlePersonalChange
+  test('handlePersonalChange updates formData correctly', () => {
+    render(<Profile />);
+    const personalEditButton = getPersonalEditButton();
+    
+    expect(personalEditButton).toBeInTheDocument();
+    fireEvent.click(personalEditButton);
+    const fullNameInput = screen.getByLabelText('Full Name');
+    fireEvent.change(fullNameInput, { target: { id: 'fullName', value: 'Jane Doe' } });
+    
+    expect(fullNameInput).toHaveValue('Jane Doe');
   });
 
-  test("renders Home and Work addresses", () => {
-    renderWithProviders(<Profile />);
+  // Test for line 44: handleSavePersonal
+  test('handleSavePersonal disables editing', () => {
+    render(<Profile />);
+    const personalEditButton = getPersonalEditButton();
     
-    expect(screen.getByText("1. Home")).toBeInTheDocument();
-    expect(screen.getByText("1234 Main St")).toBeInTheDocument();
+    expect(personalEditButton).toBeInTheDocument();
+    fireEvent.click(personalEditButton);
+    expect(screen.getByText('Save')).toBeInTheDocument();
     
-    expect(screen.getByText("2. Work")).toBeInTheDocument();
-    expect(screen.getByText("5678 Work Ave")).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Save'));
+    expect(screen.queryByText('Save')).not.toBeInTheDocument();
   });
 
-  test("renders 'Add New Address' button", () => {
-    renderWithProviders(<Profile />);
+  // Test for lines 51-54: handleAddressChange
+  test('handleAddressChange updates address data correctly', () => {
+    render(<Profile />);
+    const addressEditButtons = screen.getAllByText('Edit');
+    const firstAddressEditButton = addressEditButtons[1]; // Second Edit is for first address
     
-    expect(screen.getByRole("button", { name: /add new address/i })).toBeInTheDocument();
+    fireEvent.click(firstAddressEditButton);
+    const addressTextarea = screen.getByDisplayValue('1234 Main St');
+    fireEvent.change(addressTextarea, { target: { id: 'address', value: '999 New St' } });
+    
+    expect(addressTextarea).toHaveValue('999 New St');
   });
 
-  test("renders breadcrumb navigation", () => {
-    renderWithProviders(<Profile />);
-  
-    const breadcrumb = screen.getByRole("navigation");
-    expect(breadcrumb).toBeInTheDocument();
-  
-    expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /profile/i })).toBeInTheDocument();
+  // Test for lines 60-63: handleRadioChange
+  test('handleRadioChange updates address type', () => {
+    render(<Profile />);
+    const addressEditButtons = screen.getAllByText('Edit');
+    const firstAddressEditButton = addressEditButtons[1];
+    
+    fireEvent.click(firstAddressEditButton);
+    const workRadio = screen.getAllByLabelText('Work')[0];
+    fireEvent.click(workRadio);
+    
+    expect(workRadio).toBeChecked();
   });
-  
-  
 
+  // Test for lines 69-70: handleSaveAddress
+  test('handleSaveAddress saves address and disables editing', () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    render(<Profile />);
+    const addressEditButtons = screen.getAllByText('Edit');
+    const firstAddressEditButton = addressEditButtons[1];
+    
+    fireEvent.click(firstAddressEditButton);
+    fireEvent.click(screen.getAllByText('Save')[0]);
+    
+    expect(consoleSpy).toHaveBeenCalledWith('Address Saved:', expect.any(Object));
+    expect(screen.queryAllByText('Save')).toHaveLength(0);
+    consoleSpy.mockRestore();
+  });
+
+  // Test for lines 95-183: Personal Details section
+  test('Personal Details section renders and toggles correctly', () => {
+    render(<Profile />);
+    
+    // Check initial render
+    expect(screen.getByText('Personal Details')).toBeInTheDocument();
+    expect(screen.getByLabelText('Full Name')).toHaveValue('John Doe');
+    expect(screen.getByLabelText('Email ID')).toHaveValue('john@example.com');
+    
+    // Test toggle
+    fireEvent.click(screen.getByText('Personal Details'));
+    expect(screen.queryByLabelText('Full Name')).not.toBeInTheDocument();
+    
+    fireEvent.click(screen.getByText('Personal Details'));
+    expect(screen.getByLabelText('Full Name')).toBeInTheDocument();
+    
+    // Test edit mode
+    const personalEditButton = getPersonalEditButton();
+    expect(personalEditButton).toBeInTheDocument();
+    fireEvent.click(personalEditButton);
+    const fullNameInput = screen.getByLabelText('Full Name');
+    expect(fullNameInput).not.toBeDisabled();
+  });
+
+  // Test for lines 205-268: Address Details section (first address)
+  test('Address Details section renders and edits correctly', () => {
+    render(<Profile />);
+    
+    // Check initial render
+    expect(screen.getByText('Address Details')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('1234 Main St')).toBeInTheDocument();
+    
+    // Test toggle
+    fireEvent.click(screen.getByText('Address Details'));
+    expect(screen.queryByDisplayValue('1234 Main St')).not.toBeInTheDocument();
+    
+    fireEvent.click(screen.getByText('Address Details'));
+    expect(screen.getByDisplayValue('1234 Main St')).toBeInTheDocument();
+    
+    // Test edit mode
+    const addressEditButtons = screen.getAllByText('Edit');
+    const firstEditButton = addressEditButtons[1];
+    fireEvent.click(firstEditButton);
+    const addressInput = screen.getByDisplayValue('1234 Main St');
+    expect(addressInput).not.toBeDisabled();
+    
+    // Test radio buttons
+    const homeRadio = screen.getAllByLabelText('Home')[0];
+    expect(homeRadio).toBeChecked();
+  });
+
+  // Test for line 284: Add New Address button
+  test('Add New Address button renders', () => {
+    render(<Profile />);
+    const addButton = screen.getByText('Add New Address');
+    expect(addButton).toBeInTheDocument();
+    expect(addButton).toHaveClass('border-[#A03037]');
+  });
 });

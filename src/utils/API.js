@@ -1,5 +1,7 @@
 import axios from 'axios';
+
 const BASE_URL = "https://bookstore.incubation.bridgelabz.com/bookstore_user";
+
 export const loginUser = async (email, password) => {
     try {
         const response = await axios.post(`${BASE_URL}/login`, { email, password });
@@ -9,7 +11,8 @@ export const loginUser = async (email, password) => {
         console.error("Login Failed", error);
         throw error;
     }
-};
+}
+
 export const registerUser = async (email, password, phone, fullName) => {
     try {
         const response = await axios.post(`${BASE_URL}/registration`, { email, password, phone, fullName });
@@ -19,26 +22,37 @@ export const registerUser = async (email, password, phone, fullName) => {
         console.error("Registration Failed", error);
         throw error;
     }
-};
+}
+
 export const getAllBooks = async () => {
     try {
         const response = await axios.get(`${BASE_URL}/get/book`);
         return response.data;
     }
     catch (error) {
-        console.error("Fetching Books Failed", error);
-        throw error;
+        console.error("Error While Fetching Book via Main API: ", error);
+        try {
+            const response = await axios.get("http://localhost:3000/bookList");
+            return response.data;
+        }
+        catch (error) {
+            console.error("Fetching Books Failed", error);
+            throw error;
+        }
     }
-};
+}
+
 export const getBookReviews = async (bookId) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.get(`${BASE_URL}/get/feedback/${bookId}`, {
             headers: {
                 "x-access-token": token
             }
         });
+
         return response.data;
     }
     catch (error) {
@@ -46,112 +60,132 @@ export const getBookReviews = async (bookId) => {
         throw error;
     }
 };
+
 export const addBookReviews = async (comment, rating, bookId) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
-        const response = await axios.post(`${BASE_URL}/add/feedback/${bookId}`, { comment, rating }, {
-            headers: {
-                "x-access-token": token,
-                "Content-Type": "application/json"
+
+        const response = await axios.post(`${BASE_URL}/add/feedback/${bookId}`,
+            { comment, rating },
+            {
+                headers: {
+                    "x-access-token": token,
+                    "Content-Type": "application/json"
+                }
             }
-        });
+        );
+
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Adding Reviews Failed", error);
         throw error;
     }
 };
+
 export const addWishlist = async (bookId) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
-        const response = await axios.post(`${BASE_URL}/add_wish_list/${bookId}`, { bookId }, {
-            headers: {
-                "x-access-token": token,
-                "Content-Type": "application/json"
+
+        const response = await axios.post(`${BASE_URL}/add_wish_list/${bookId}`,
+            { bookId },
+            {
+                headers: {
+                    "x-access-token": token,
+                    "Content-Type": "application/json"
+                }
             }
-        });
+        );
+
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Wishlist Adding Failed", error);
         throw error;
     }
 };
+
 export const removeWishlist = async (bookId) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.delete(`${BASE_URL}/remove_wishlist_item/${bookId}`, {
             headers: {
                 "x-access-token": token,
                 "Content-Type": "application/json"
             }
         });
+
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Wishlist Removal Failed", error);
         throw error;
     }
 };
+
 export const getWishlistItems = async () => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.get(`${BASE_URL}/get_wishlist_items`, {
             headers: {
                 "x-access-token": token,
                 "Content-Type": "application/json"
             }
         });
+
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Getting Wishlist Items Failed", error);
         throw error;
     }
 };
+
 export const addToCart = async (bookId) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.post(`${BASE_URL}/add_cart_item/${bookId}`, { bookId }, {
             headers: {
                 "x-access-token": token,
                 "Content-Type": "application/json"
             }
         });
+
         return response.status;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Adding to Cart Failed", error);
         throw error;
     }
 };
+
 export const getCartItems = async () => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.get(`${BASE_URL}/get_cart_items`, {
             headers: {
                 "x-access-token": token,
                 "Content-Type": "application/json"
             }
         });
+
         return response.data.result;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Getting Cart Items Failed", error);
         throw error;
     }
 };
+
 export const removeCartItems = async (bookId) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.delete(`${BASE_URL}/remove_cart_item/${bookId}`, {
             headers: {
                 "x-access-token": token,
@@ -159,46 +193,48 @@ export const removeCartItems = async (bookId) => {
             },
             data: { bookId }
         });
+
         return response.status;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Getting Cart Items Failed", error);
         throw error;
     }
 };
+
 export const updateCartItems = async (bookId, quantity) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.put(`${BASE_URL}/cart_item_quantity/${bookId}`, { quantityToBuy: quantity }, {
             headers: {
                 "x-access-token": token,
                 "Content-Type": "application/json"
             }
         });
-        console.log("RESPONSE FROM API CALL: ", response);
+
         return response.status;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Updating Cart Items Failed", error);
         throw error;
     }
 };
+
 export const addOrder = async (allOrders) => {
     try {
         const tokenData = JSON.parse(localStorage.getItem("token") || "null");
         const token = tokenData?.token;
+
         const response = await axios.post(`${BASE_URL}/add/order`, { orders: allOrders }, {
             headers: {
                 "x-access-token": token,
                 "Content-Type": "application/json"
             }
         });
-        console.log("RESPONSE FROM API CALL: ", response);
+
         return response.status;
-    }
-    catch (error) {
-        console.error("Updating Cart Items Failed", error);
+    } catch (error) {
+        console.error("Adding Order Failed", error);
         throw error;
     }
 };

@@ -23,7 +23,7 @@ interface BooksState {
 
 export const fetchBooks = createAsyncThunk<Book[]>("books/fetchBooks", async () => {
     const response = await getAllBooks();
-    return response.result;
+    return response.result || response;
 });
 
 const initialState: BooksState = {
